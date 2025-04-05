@@ -5,15 +5,23 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   sonarqube:
-    name: SonarQube
+    name: SonarQube Analysis
     runs-on: macos-latest
+    
     steps:
+      # Checkout del código fuente
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0  # Desactivar clones superficiales para obtener un mejor análisis
+
+      # Configuración de la acción de SonarCloud
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Asegúrate de que tu token esté en GitHub Secrets
+          SONAR_HOST_URL: "https://sonarcloud.io"  # URL del servidor de SonarCloud
+          SONAR_PROJECT_KEY: "jahsscz"  # Reemplaza con la clave de tu proyecto en SonarCloud
+          SONAR_ORG_KEY: "jahsscz"  # Reemplaza con tu organización en SonarCloud
