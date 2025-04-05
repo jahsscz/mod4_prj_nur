@@ -1,9 +1,12 @@
-name: CI - Build Verification
+name: CI Workflow
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
-      - main  # o el nombre de la rama principal que estés usando
+      - main
 
 jobs:
   build:
@@ -11,19 +14,32 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v2
       with:
-        node-version: '16'  # o la versión de Node.js que uses
+        node-version: '16'
+
+    - name: Cache node modules
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
 
     - name: Install dependencies
       run: yarn install
 
-    - name: Run build
-      run: yarn run build
+    - name: Run linting
+      run: yarn lint
 
-    - name: Verify build success
-      if: ${{ failure() }}
-      run: echo "Build failed, please fix the errors."
+    - name: Run tests
+      run: yarn test
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v1
+      with:
+        organization: 'jahsscz'  # Reemplaza con tu organización en SonarCloud
+        token: ${{ secrets.SONAR_TOKEN }}  # Usa el secreto SONAR_TOKEN configurado
