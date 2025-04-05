@@ -1,0 +1,29 @@
+name: CI - Build Verification
+
+on:
+  pull_request:
+    branches:
+      - main  # o el nombre de la rama principal que estés usando
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # o la versión de Node.js que uses
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Run build
+      run: yarn run build
+
+    - name: Verify build success
+      if: ${{ failure() }}
+      run: echo "Build failed, please fix the errors."
