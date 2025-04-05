@@ -23,5 +23,5 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Asegúrate de que tu token esté en GitHub Secrets
           SONAR_HOST_URL: "https://sonarcloud.io"  # URL del servidor de SonarCloud
-          SONAR_PROJECT_KEY: "jahsscz"  # Reemplaza con la clave de tu proyecto en SonarCloud
+          SONAR_PROJECT_KEY: "jahsscz_mod4_prj_nur"  # Reemplaza con la clave de tu proyecto en SonarCloud
           SONAR_ORG_KEY: "jahsscz"  # Reemplaza con tu organización en SonarCloud
